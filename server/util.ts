@@ -1,5 +1,5 @@
-export const resJSON = (
-  json: Record<string, unknown> | Record<string, unknown>[],
+export const resJSON = <T>(
+  json: T,
   statusCode?: number,
   headers?: HeadersInit
 ) => {
