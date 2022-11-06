@@ -20,6 +20,27 @@ const getBackgroundForRating = (rating: number) => {
 }
 </script>
 
+<div class="mb-3 flex items-center justify-center">
+  <div class="flex flex-col sm:flex-row space-x-0 sm:space-x-6">
+    <div class="flex items-center">
+      <div class="w-5 h-5 bg-green-500 mr-2" />
+      <p>8.5&ndash;10.0</p>
+    </div>
+    <div class="flex items-center">
+      <div class="w-5 h-5 bg-yellow-500 mr-2" />
+      <p>7.6&ndash;8.4</p>
+    </div>
+    <div class="flex items-center">
+      <div class="w-5 h-5 bg-orange-500 mr-2" />
+      <p>6.5&ndash;7.5</p>
+    </div>
+    <div class="flex items-center">
+      <div class="w-5 h-5 bg-red-500 mr-2" />
+      <p>0.0&ndash;6.4</p>
+    </div>
+  </div>
+</div>
+
 <div class="max-w-[100vw] overflow-x-auto">
   <div class="relative p-8">
     <table class="table-auto m-auto">
