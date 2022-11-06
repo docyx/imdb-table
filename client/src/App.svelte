@@ -1,10 +1,19 @@
 <script lang="ts">
 import { onMount, tick } from 'svelte'
 import { getIMDbID, getRatings, search } from './api'
+import { colors } from './stores'
 import type { AutocompleteItem, Ratings } from './types'
 import Autocomplete from './components/Autocomplete.svelte'
 import Corner from './components/Corner.svelte'
 import Table from './components/Table.svelte'
+import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
+
+// NOTE: Probably (definitely) faster than _.isEqual so we'll just leave it.
+let isColorblind =
+  $colors[0] === COLORBLIND_COLORS[0] &&
+  $colors[1] === COLORBLIND_COLORS[1] &&
+  $colors[2] === COLORBLIND_COLORS[2] &&
+  $colors[3] === COLORBLIND_COLORS[3]
 
 let inputEl: HTMLInputElement | null = null
 let loading = false
@@ -32,6 +41,11 @@ const getAutocompletions = async (
 
 const onAutocompleteClick = async (e: CustomEvent<string>) =>
   await load(e.detail)
+
+const onColorblindToggle = ({ currentTarget }: Event) => {
+  if ((currentTarget as HTMLInputElement).checked) $colors = COLORBLIND_COLORS
+  else $colors = DEFAULT_COLORS
+}
 
 const onGoBackClick = async () => {
   ratings = []
@@ -100,6 +114,18 @@ const load = async (tmdbID: string) => {
         on:autocomplete-click={onAutocompleteClick}
         bind:inputEl
       />
+
+      <div class="flex items-center justify-center mt-4">
+        <label class="flex items-center space-x-1.5">
+          <input
+            type="checkbox"
+            bind:checked={isColorblind}
+            on:change={onColorblindToggle}
+            class="accent-yellow-400 border border-red-400"
+          />
+          <p class="text-neutral-400">Colorblind mode</p>
+        </label>
+      </div>
     </div>
   {/if}
 </div>

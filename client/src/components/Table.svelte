@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { Ratings } from '../types'
+import { colors } from '../stores'
 
 export let ratings: Ratings
 
@@ -13,29 +14,29 @@ let maxEpisodeCount = ratings.reduce(
 )
 
 const getBackgroundForRating = (rating: number) => {
-  if (rating >= 8.5) return 'bg-green-500'
-  else if (rating >= 7.6) return 'bg-yellow-500'
-  else if (rating >= 6.5) return 'bg-orange-500'
-  else return 'bg-red-500'
+  if (rating >= 8.5) return $colors[0]
+  else if (rating >= 7.6) return $colors[1]
+  else if (rating >= 6.5) return $colors[2]
+  else return $colors[3]
 }
 </script>
 
 <div class="mb-3 flex items-center justify-center">
   <div class="flex flex-col sm:flex-row space-x-0 sm:space-x-6">
     <div class="flex items-center">
-      <div class="w-5 h-5 bg-green-500 mr-2" />
+      <div class={`w-5 h-5 mr-2 ${$colors[0]}`} />
       <p>8.5&ndash;10.0</p>
     </div>
     <div class="flex items-center">
-      <div class="w-5 h-5 bg-yellow-500 mr-2" />
+      <div class={`w-5 h-5 mr-2 ${$colors[1]}`} />
       <p>7.6&ndash;8.4</p>
     </div>
     <div class="flex items-center">
-      <div class="w-5 h-5 bg-orange-500 mr-2" />
+      <div class={`w-5 h-5 mr-2 ${$colors[2]}`} />
       <p>6.5&ndash;7.5</p>
     </div>
     <div class="flex items-center">
-      <div class="w-5 h-5 bg-red-500 mr-2" />
+      <div class={`w-5 h-5 mr-2 ${$colors[3]}`} />
       <p>0.0&ndash;6.4</p>
     </div>
   </div>
