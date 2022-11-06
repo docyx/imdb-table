@@ -18,7 +18,7 @@ export default async (req: Request) => {
   const json = await res.json()
 
   const rows = json.rows
-  const seasons: [number, string][] = []
+  const seasons: [number, string][][] = []
 
   for (const episode of rows) {
     const seasonNumber = parseInt(episode[2]) - 1
