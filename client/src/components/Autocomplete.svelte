@@ -3,6 +3,7 @@ import { debounce } from 'lodash-es'
 import { createEventDispatcher } from 'svelte'
 import type { AutocompleteItem } from '../types'
 
+export let placeholder: string | null = null
 export let inputEl: HTMLInputElement | null = null
 export let getAutocompletions: (query: string) => Promise<AutocompleteItem[]>
 
@@ -32,7 +33,7 @@ const onInput = debounce(() => {
     on:input={onInput}
     on:focus={() => (showAutocomplete = true)}
     class="bg-transparent border-b border-b-white p-1 text-xl focus:outline-none focus:border-b-yellow-400 transition-colors"
-    placeholder="TV show name"
+    {placeholder}
   />
 
   {#if showAutocomplete && input.trim() !== ''}

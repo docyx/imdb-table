@@ -95,6 +95,7 @@ const load = async (tmdbID: string) => {
       <h1 class="text-5xl font-bold mb-4 text-center">IMDb Table</h1>
 
       <Autocomplete
+        placeholder="TV show name"
         {getAutocompletions}
         on:autocomplete-click={onAutocompleteClick}
         bind:inputEl
