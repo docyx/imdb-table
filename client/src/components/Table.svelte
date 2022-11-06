@@ -59,10 +59,6 @@ const getBackgroundForRating = (rating: number) => {
                   activeEpisode = null
                 }}
                 class={`${getBackgroundForRating(episode[0])}`}
-                colspan={episodeIndex !== ratings[seasonIndex].length - 1 &&
-                !ratings[seasonIndex][episodeIndex + 1]
-                  ? 2
-                  : 1}
               >
                 <a
                   class="block p-1"
@@ -70,6 +66,11 @@ const getBackgroundForRating = (rating: number) => {
                   >{episode[0].toFixed(1)}</a
                 >
               </td>
+            {:else}
+              <td
+                class="bg-neutral-700"
+                title="This episode is not rated on IMDb."
+              />
             {/if}
           {/each}
         </tr>
