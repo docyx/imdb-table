@@ -9,7 +9,7 @@ let activeEpisode: number | null = null
 
 let maxEpisodeCount = ratings.reduce(
   (max, currentSeason) =>
-    currentSeason.length > max ? currentSeason.length : max,
+    currentSeason?.length > max ? currentSeason.length : max,
   0
 )
 
@@ -69,7 +69,8 @@ const getBackgroundForRating = (rating: number) => {
                 : 'text-neutral-400 font-light'
             } w-10 pr-2 sticky left-0 p-1 bg-neutral-900`}>{seasonIndex + 1}</th
           >
-          {#each season as episode, episodeIndex}
+          <!-- FIXME(server): This is a temporary fix for seasons that have no ratings. -->
+          {#each season ?? Array(maxEpisodeCount) as episode, episodeIndex}
             {#if episode}
               <td
                 on:mouseenter={() => {
