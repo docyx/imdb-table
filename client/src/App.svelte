@@ -27,6 +27,20 @@ onMount(async () => {
   else inputEl?.focus()
 })
 
+const onPopState = () => {
+  if (location.search) {
+    const queryParams = new URLSearchParams(location.search)
+    const id = queryParams.get('id')
+
+    if (id) load(id)
+    return
+  }
+
+  ratings = []
+
+  tick().then(() => inputEl?.focus())
+}
+
 const getAutocompletions = async (
   query: string
 ): Promise<AutocompleteItem[]> => {
@@ -81,6 +95,8 @@ const load = async (tmdbID: string) => {
   }
 }
 </script>
+
+<svelte:window on:popstate={onPopState} />
 
 <Corner />
 
