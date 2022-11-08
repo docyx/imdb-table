@@ -4,6 +4,10 @@ export interface AutocompleteItem {
   secondaryLabel?: string
 }
 
-export type Colors = [string, string, string, string]
+export interface SearchResult {
+  id: string
+  title: string
+  year?: number
+}
 
 export type Ratings = Array<Array<[number, string]>>

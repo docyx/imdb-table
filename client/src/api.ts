@@ -1,8 +1,4 @@
-interface SearchResult {
-  id: string
-  title: string
-  year?: number
-}
+import type { SearchResult } from './types'
 
 const BASE_URL = import.meta.env.DEV
   ? 'http://localhost:3000/api'
