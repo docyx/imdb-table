@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "https://docyx.github.io"
         },
         {
           "key": "Access-Control-Allow-Methods",
