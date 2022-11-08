@@ -1,23 +1,19 @@
 <script lang="ts">
+import type { AutocompleteItem, Info } from './types'
 import { onMount, tick } from 'svelte'
-import { getIMDbID, getRatings, search } from './api'
+import { getInfo, search } from './api'
 import { colors } from './stores'
-import type { AutocompleteItem, Ratings } from './types'
+import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
 import Autocomplete from './components/Autocomplete.svelte'
 import Corner from './components/Corner.svelte'
 import Table from './components/Table.svelte'
-import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
+import { isEqual } from 'lodash-es'
 
-// NOTE: Probably (definitely) faster than _.isEqual so we'll just leave it.
-let isColorblind =
-  $colors[0] === COLORBLIND_COLORS[0] &&
-  $colors[1] === COLORBLIND_COLORS[1] &&
-  $colors[2] === COLORBLIND_COLORS[2] &&
-  $colors[3] === COLORBLIND_COLORS[3]
+let isColorblind = isEqual($colors, COLORBLIND_COLORS)
 
 let inputEl: HTMLInputElement | null = null
 let loading = false
-let ratings: Ratings = []
+let info: Info | null = null
 
 onMount(async () => {
   const queryParams = new URLSearchParams(location.search)
@@ -26,6 +22,10 @@ onMount(async () => {
   if (id) await load(id)
   else inputEl?.focus()
 })
+
+const slugify = (text: string) => {
+  return text.replace(/[\W]+/g, '-').toLowerCase()
+}
 
 const onPopState = () => {
   if (location.search) {
@@ -36,7 +36,7 @@ const onPopState = () => {
     return
   }
 
-  ratings = []
+  info = null
 
   tick().then(() => inputEl?.focus())
 }
@@ -62,7 +62,7 @@ const onColorblindToggle = ({ currentTarget }: Event) => {
 }
 
 const onGoBackClick = async () => {
-  ratings = []
+  info = null
 
   history.pushState({}, '', import.meta.env.BASE_URL)
 
@@ -74,22 +74,19 @@ const load = async (tmdbID: string) => {
   try {
     loading = true
 
-    const imdbID = await getIMDbID(tmdbID)
-
-    if (!imdbID) {
-      loading = false
-      return
-    }
-
-    const ratingsRes = await getRatings(imdbID)
+    const infoRes = await getInfo(tmdbID)
 
     loading = false
-    ratings = ratingsRes
+    info = infoRes
 
     const params = new URLSearchParams(location.search)
     params.set('id', tmdbID)
 
-    history.pushState({}, '', `${location.href.split('?')[0]}?${params}`)
+    history.pushState(
+      {},
+      '',
+      `${location.href.split('?')[0]}?${params}#/${slugify(info.name)}`
+    )
   } catch {
     loading = false
   }
@@ -103,9 +100,15 @@ const load = async (tmdbID: string) => {
 <div class="min-h-[90vh] flex m-auto">
   {#if loading}
     <p class="m-auto">Loading...</p>
-  {:else if ratings.length}
+  {:else if info}
     <div class="text-center py-4 m-auto">
-      <Table {ratings} />
+      <div class="flex items-center justify-center mb-4">
+        <h2 class="text-3xl font-semibold">
+          {info.name} <span class="text-neutral-400">({info.year})</span>
+        </h2>
+      </div>
+
+      <Table ratings={info.ratings} />
 
       <div class="flex flex-col mt-4 space-y-3">
         <button

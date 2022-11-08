@@ -11,3 +11,11 @@ export interface SearchResult {
 }
 
 export type Ratings = Array<Array<[number, string]>>
+
+export interface Info {
+  name: string
+  year?: number
+  ratings: Ratings
+}
+
+export type Colors = [string, string, string, string]

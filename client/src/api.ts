@@ -12,8 +12,5 @@ const getJSONResponse = async (endpoint: string) => {
 export const search = async (query: string): Promise<SearchResult[]> =>
   await getJSONResponse(`search?q=${query}`)
 
-export const getIMDbID = async (tmdbID: string) =>
-  (await getJSONResponse(`id?id=${tmdbID}`)).id
-
-export const getRatings = async (imdbID: string) =>
-  await getJSONResponse(`ratings?id=${imdbID}`)
+export const getInfo = async (tmdbID: string) =>
+  await getJSONResponse(`info?id=${tmdbID}`)
