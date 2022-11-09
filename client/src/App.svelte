@@ -19,7 +19,7 @@ onMount(async () => {
   const queryParams = new URLSearchParams(location.search)
   const id = queryParams.get('id')
 
-  if (id) await load(id)
+  if (id) await load(id, true)
   else inputEl?.focus()
 })
 
@@ -32,7 +32,7 @@ const onPopState = () => {
     const queryParams = new URLSearchParams(location.search)
     const id = queryParams.get('id')
 
-    if (id) load(id)
+    if (id) load(id, true)
     return
   }
 
@@ -70,7 +70,7 @@ const onGoBackClick = async () => {
   inputEl?.focus()
 }
 
-const load = async (tmdbID: string) => {
+const load = async (tmdbID: string, replaceURL = false) => {
   try {
     loading = true
 
@@ -82,7 +82,7 @@ const load = async (tmdbID: string) => {
     const params = new URLSearchParams(location.search)
     params.set('id', tmdbID)
 
-    history.pushState(
+    history[replaceURL ? 'replaceState' : 'pushState'](
       {},
       '',
       `${location.href.split('?')[0]}?${params}#/${slugify(info.name)}`
