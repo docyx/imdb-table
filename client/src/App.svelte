@@ -97,20 +97,20 @@ const load = async (tmdbID: string) => {
 
 <Corner />
 
-<div class="min-h-[90vh] flex m-auto">
+<main class="min-h-[90vh] flex m-auto">
   {#if loading}
     <p class="m-auto">Loading...</p>
   {:else if info}
     <div class="text-center py-4 m-auto">
       <div class="flex items-center justify-center mb-4">
-        <h2 class="text-3xl font-semibold">
+        <h1 class="text-3xl font-semibold">
           {info.name} <span class="text-neutral-400">({info.year})</span>
-        </h2>
+        </h1>
       </div>
 
       <Table ratings={info.ratings} />
 
-      <div class="flex flex-col mt-4 space-y-3">
+      <nav class="flex flex-col mt-4 space-y-3">
         <button
           class="bg-transparent text-yellow-400"
           on:click={() => {
@@ -121,7 +121,7 @@ const load = async (tmdbID: string) => {
         <button class="bg-transparent text-yellow-400" on:click={onGoBackClick}
           >⬅️ Go back</button
         >
-      </div>
+      </nav>
     </div>
   {:else}
     <div class="m-auto">
@@ -147,4 +147,4 @@ const load = async (tmdbID: string) => {
       </div>
     </div>
   {/if}
-</div>
+</main>

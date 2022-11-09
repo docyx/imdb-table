@@ -1,6 +1,8 @@
 <script lang="ts">
 import type { Ratings } from '../types'
 import { colors } from '../stores'
+import { isEqual } from 'lodash-es'
+import { DEFAULT_COLORS } from '../constants'
 
 export let ratings: Ratings
 
@@ -44,9 +46,13 @@ const getBackgroundForRating = (rating: number) => {
 
 <div class="max-w-[100vw] overflow-x-auto">
   <div class="relative p-8">
-    <table class="table-auto m-auto">
+    <table
+      class={`table-auto m-auto${
+        isEqual($colors, DEFAULT_COLORS) ? ' [&_td]:text-black' : ''
+      }`}
+    >
       <tr class="sticky top-0 bg-neutral-900">
-        <th />
+        <th aria-hidden="true" />
         {#each Array(maxEpisodeCount) as _, i}
           <th
             scope="col"
@@ -85,6 +91,9 @@ const getBackgroundForRating = (rating: number) => {
               >
                 <a
                   class="block p-1"
+                  aria-label={`Season ${seasonIndex + 1} Episode ${
+                    episodeIndex + 1
+                  }`}
                   href={`https://www.imdb.com/title/${episode[1]}/`}
                   >{episode[0].toFixed(1)}</a
                 >
