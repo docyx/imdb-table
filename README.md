@@ -4,7 +4,7 @@ IMDb rating tables for TV shows.
 
 [https://docyx.github.io/imdb-table](https://docyx.github.io/imdb-table)
 
-![Example Table (Dexter)](./img/table.png)
+[![Example Rating Table (The Simpsons)](./table.png)](https://docyx.github.io/imdb-table/?id=456#/the-simpsons)
 
 ## License
 
