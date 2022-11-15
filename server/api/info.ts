@@ -1,4 +1,11 @@
 import { resJSON } from '../util'
+import type { TMDbMediaPartial } from '../types'
+
+type TMDbMediaPartialWithExternalIDs = TMDbMediaPartial & {
+  external_ids: {
+    imdb_id: string
+  }
+}
 
 export const config = {
   runtime: 'experimental-edge',
@@ -16,7 +23,7 @@ export default async (req: Request) => {
   const infoRes = await fetch(
     `https://api.themoviedb.org/3/tv/${tmdbID}?append_to_response=external_ids&api_key=${process.env.TMDB_API_KEY}`
   )
-  const infoJSON = await infoRes.json()
+  const infoJSON: TMDbMediaPartialWithExternalIDs = await infoRes.json()
 
   const res = await fetch(
     `https://imdb.beuke.org/series.json?sql=select+*+from+series+where+parentTconst+%3D+%27${infoJSON.external_ids.imdb_id}%27`

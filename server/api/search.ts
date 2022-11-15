@@ -1,4 +1,5 @@
 import { resJSON } from '../util'
+import type { TMDbMediaPartial } from '../types'
 
 export const config = {
   runtime: 'experimental-edge',
@@ -20,10 +21,12 @@ export default async (req: Request) => {
   const json = await res.json()
 
   return resJSON(
-    json.results.map((media) => ({
+    json.results.map((media: TMDbMediaPartial) => ({
       id: media.id,
       title: media.name,
-      year: new Date(media.first_air_date).getFullYear(),
+      year: media.first_air_date
+        ? new Date(media.first_air_date).getFullYear()
+        : null,
     })),
     200,
     { 'cache-control': 'public, s-maxage=604800' }
