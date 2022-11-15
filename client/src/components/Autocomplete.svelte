@@ -10,10 +10,55 @@ export let getAutocompletions: (query: string) => Promise<AutocompleteItem[]>
 const dispatch = createEventDispatcher()
 
 let input = ''
+let autocompletionsContainer: HTMLDivElement | null = null
+let cursorIndex: number | null = null
 let autocompletions: AutocompleteItem[] = []
 let showAutocomplete = false
 
-const onInput = debounce(() => {
+const onKeyDown = ({ key }: KeyboardEvent) => {
+  if (key === 'Escape') {
+    inputEl?.blur()
+    return
+  }
+
+  if (cursorIndex != null) {
+    if (key === 'Enter')
+      dispatch('autocomplete-click', autocompletions[cursorIndex].id)
+  }
+  if (key === 'ArrowUp' || key === 'ArrowDown') {
+    if (cursorIndex == null) {
+      cursorIndex = 0
+      return
+    }
+
+    const getActiveNode = () =>
+      cursorIndex == null
+        ? undefined
+        : (autocompletionsContainer?.childNodes[cursorIndex] as
+            | HTMLButtonElement
+            | undefined)
+
+    if (key === 'ArrowUp') {
+      if (cursorIndex === 0) cursorIndex = null
+      else {
+        cursorIndex -= 1
+
+        getActiveNode()?.scrollIntoView({ block: 'center' })
+      }
+    } else if (key === 'ArrowDown') {
+      if (cursorIndex === autocompletions.length - 1) {
+        cursorIndex = 0
+        getActiveNode()?.scrollIntoView()
+      } else {
+        cursorIndex += 1
+
+        getActiveNode()?.scrollIntoView({ block: 'center' })
+      }
+    }
+  }
+}
+
+const onKeyDownDebounced = debounce(() => {
   if (input === '') {
     autocompletions = []
     return
@@ -28,22 +73,38 @@ const onInput = debounce(() => {
 <div class="relative" id="container">
   <input
     type="text"
+    aria-haspopup="true"
+    aria-controls="menu"
     bind:this={inputEl}
     bind:value={input}
-    on:input={onInput}
+    on:keydown={onKeyDown}
+    on:keydown={onKeyDownDebounced}
     on:focus={() => (showAutocomplete = true)}
+    on:blur={() => (showAutocomplete = false)}
     class="bg-transparent border-b border-b-white p-1 text-xl focus:outline-none focus:border-b-yellow-400 transition-colors"
     {placeholder}
   />
 
   {#if showAutocomplete && input.trim() !== ''}
     <div
+      id="menu"
+      role="menu"
+      aria-activedescendant={cursorIndex != null
+        ? autocompletions[cursorIndex].id
+        : null}
       class="absolute bg-neutral-800 w-full text-lg font-medium max-h-56 overflow-scroll"
+      bind:this={autocompletionsContainer}
     >
-      {#each autocompletions as autocompletion}
+      {#each autocompletions as autocompletion, i}
         <button
           on:click={() => dispatch('autocomplete-click', autocompletion.id)}
-          class="w-full p-3 hover:bg-neutral-700 text-left"
+          on:mouseenter={() => (cursorIndex = i)}
+          on:mouseleave={() => (cursorIndex = null)}
+          id={autocompletion.id}
+          role="menuitem"
+          class={`w-full p-3 hover:bg-neutral-700 text-left${
+            i === cursorIndex ? ' bg-neutral-700' : ''
+          }`}
         >
           {autocompletion.label}
           {#if autocompletion.secondaryLabel}
