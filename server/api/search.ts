@@ -1,5 +1,5 @@
-import { resJSON } from '../util'
 import type { TMDbMediaPartial } from '../types'
+import { resJSON } from '../util'
 
 export const config = {
   runtime: 'experimental-edge',
@@ -16,7 +16,7 @@ export default async (req: Request) => {
 
   const normalizedQuery = query.toLowerCase().trim()
   const res = await fetch(
-    `https://api.themoviedb.org/3/search/tv/?query=${normalizedQuery}&api_key=${process.env.TMDB_API_KEY}`
+    `https://api.themoviedb.org/3/search/tv?query=${normalizedQuery}&api_key=${process.env.TMDB_API_KEY}`
   )
   const json = await res.json()
 
