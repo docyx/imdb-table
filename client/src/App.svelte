@@ -1,13 +1,13 @@
 <script lang="ts">
-import type { AutocompleteItem, Info } from './types'
+import { isEqual } from 'lodash-es'
 import { onMount, tick } from 'svelte'
 import { getInfo, search } from './api'
-import { colors } from './stores'
-import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
 import Autocomplete from './components/Autocomplete.svelte'
 import Corner from './components/Corner.svelte'
 import Table from './components/Table.svelte'
-import { isEqual } from 'lodash-es'
+import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
+import { colors } from './stores'
+import type { AutocompleteItem, Info } from './types'
 
 let isColorblind = isEqual($colors, COLORBLIND_COLORS)
 
