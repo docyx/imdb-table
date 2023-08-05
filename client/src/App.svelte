@@ -104,7 +104,11 @@ const load = async (tmdbID: string, replaceURL = false) => {
     <div class="text-center py-4 m-auto">
       <div class="flex items-center justify-center mb-4">
         <h1 class="text-3xl font-semibold">
-          {info.name} <span class="text-neutral-400">({info.year})</span>
+          {info.name}
+
+          {#if info.year}
+            <span class="text-neutral-400">({info.year})</span>
+          {/if}
         </h1>
       </div>
 
