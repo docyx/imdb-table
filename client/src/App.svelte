@@ -112,7 +112,11 @@ const load = async (tmdbID: string, replaceURL = false) => {
         </h1>
       </div>
 
-      <Table ratings={info.ratings} />
+      {#if info.ratings.length}
+        <Table ratings={info.ratings} />
+      {:else}
+        <p class="text-neutral-400 my-10">No ratings found :&lpar;</p>
+      {/if}
 
       <nav class="flex flex-col mt-4 space-y-3">
         <button
