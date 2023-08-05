@@ -32,7 +32,7 @@ const onInput = debounce(() => {
     bind:value={input}
     on:input={onInput}
     on:focus={() => (showAutocomplete = true)}
-    class="bg-transparent border-b border-b-white p-1 text-xl focus:outline-none focus:border-b-yellow-400 transition-colors"
+    class="bg-transparent w-full border-b border-b-white p-1 text-xl focus:outline-none focus:border-b-yellow-400 transition-colors"
     {placeholder}
   />
 
