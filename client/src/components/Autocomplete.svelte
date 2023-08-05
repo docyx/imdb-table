@@ -25,7 +25,7 @@ const onInput = debounce(() => {
 }, 300)
 </script>
 
-<div class="relative" id="container">
+<div class="relative">
   <input
     type="text"
     bind:this={inputEl}
