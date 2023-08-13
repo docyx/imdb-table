@@ -1,5 +1,5 @@
-import { resJSON } from '../util'
 import type { TMDbMediaPartial } from '../types'
+import { resJSON } from '../util'
 
 type TMDbMediaPartialWithExternalIDs = TMDbMediaPartial & {
   external_ids: {

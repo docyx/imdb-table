@@ -14,3 +14,6 @@ export const search = async (query: string): Promise<SearchResult[]> =>
 
 export const getInfo = async (tmdbID: string) =>
   await getJSONResponse(`info?id=${tmdbID}`)
+
+export const getWatchTime = async (tmdbID: string) =>
+  (await getJSONResponse(`watch-time?id=${tmdbID}`)).watchTime

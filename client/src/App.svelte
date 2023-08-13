@@ -1,7 +1,7 @@
 <script lang="ts">
 import { isEqual } from 'lodash-es'
 import { onMount, tick } from 'svelte'
-import { getInfo, search } from './api'
+import { getInfo, getWatchTime, search } from './api'
 import Autocomplete from './components/Autocomplete.svelte'
 import Corner from './components/Corner.svelte'
 import Table from './components/Table.svelte'
@@ -14,6 +14,10 @@ let isColorblind = isEqual($colors, COLORBLIND_COLORS)
 let inputEl: HTMLInputElement | null = null
 let loading = false
 let info: Info | null = null
+let watchTime: number | null = null
+
+$: watchTimeDays = watchTime ? Math.floor(watchTime / 60 / 24) : 0
+$: watchTimeHours = watchTime ? Math.round((watchTime / 60) % 24) : 0
 
 onMount(async () => {
   const queryParams = new URLSearchParams(location.search)
@@ -37,6 +41,7 @@ const onPopState = () => {
   }
 
   info = null
+  watchTime = null
 
   tick().then(() => inputEl?.focus())
 }
@@ -63,6 +68,7 @@ const onColorblindToggle = ({ currentTarget }: Event) => {
 
 const onGoBackClick = async () => {
   info = null
+  watchTime = null
 
   history.pushState({}, '', import.meta.env.BASE_URL)
 
@@ -74,10 +80,18 @@ const load = async (tmdbID: string, replaceURL = false) => {
   try {
     loading = true
 
-    const infoRes = await getInfo(tmdbID)
+    const [infoRes, watchTimeRes] = await Promise.allSettled([
+      getInfo(tmdbID),
+      getWatchTime(tmdbID),
+    ])
+
+    if (infoRes.status !== 'fulfilled') throw new Error('Failed to get info')
+
+    info = infoRes.value
+
+    if (watchTimeRes.status === 'fulfilled') watchTime = watchTimeRes.value
 
     loading = false
-    info = infoRes
 
     const params = new URLSearchParams(location.search)
     params.set('id', tmdbID)
@@ -85,7 +99,7 @@ const load = async (tmdbID: string, replaceURL = false) => {
     history[replaceURL ? 'replaceState' : 'pushState'](
       {},
       '',
-      `${location.href.split('?')[0]}?${params}#/${slugify(info.name)}`
+      `${location.href.split('?')[0]}?${params}#/${slugify(info!.name)}`
     )
   } catch {
     loading = false
@@ -102,7 +116,7 @@ const load = async (tmdbID: string, replaceURL = false) => {
     <p class="m-auto">Loading...</p>
   {:else if info}
     <div class="text-center py-4 m-auto">
-      <div class="flex items-center justify-center mb-4">
+      <div class="flex items-center justify-center">
         <h1 class="text-3xl font-semibold">
           {info.name}
 
@@ -112,13 +126,25 @@ const load = async (tmdbID: string, replaceURL = false) => {
         </h1>
       </div>
 
-      {#if info.ratings.length}
-        <Table ratings={info.ratings} />
-      {:else}
-        <p class="text-neutral-400 my-10">No ratings found :&lpar;</p>
+      <div class="mt-4">
+        {#if info.ratings.length}
+          <Table ratings={info.ratings} />
+        {:else}
+          <p class="text-neutral-400 my-10">No ratings found :&lpar;</p>
+        {/if}
+      </div>
+
+      {#if watchTime}
+        <div class="bg-neutral-700 rounded-full inline-block px-3 py-1 mb-6">
+          <p>
+            Watch time: <span class="font-semibold"
+              >{watchTimeDays}d {watchTimeHours}h</span
+            >
+          </p>
+        </div>
       {/if}
 
-      <nav class="flex flex-col mt-4 space-y-3">
+      <nav class="flex flex-col space-y-3">
         <button
           class="bg-transparent text-yellow-400"
           on:click={() => {
