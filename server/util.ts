@@ -1,5 +1,5 @@
-export const resJSON = <T>(
-  json: T,
+export const resJSON = (
+  json: any,
   statusCode?: number,
   headers?: HeadersInit
 ) => {
