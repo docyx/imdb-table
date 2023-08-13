@@ -29,6 +29,15 @@ const migrate = (oldVersion: number) => {
 
       break
     }
+    case 0: {
+      const oldDefaultColors = localStorage.getItem('colors')
+      if (!oldDefaultColors) return
+
+      if (JSON.parse(oldDefaultColors)[0] === 'bg-green-500') {
+        localStorage.clear()
+        colors.set(DEFAULT_COLORS)
+      }
+    }
   }
 }
 

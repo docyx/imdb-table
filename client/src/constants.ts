@@ -1,11 +1,10 @@
 import type { Colors } from './types'
 
-// NOTE: Defaults are text-black
 export const DEFAULT_COLORS: Colors = [
-  'bg-green-500',
-  'bg-yellow-500',
-  'bg-orange-500',
-  'bg-red-500',
+  'bg-green-500 text-black',
+  'bg-yellow-500 text-black',
+  'bg-orange-500 text-black',
+  'bg-red-500 text-black',
 ]
 
 export const COLORBLIND_COLORS: Colors = [

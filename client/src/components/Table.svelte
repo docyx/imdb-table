@@ -1,8 +1,6 @@
 <script lang="ts">
-import type { Ratings } from '../types'
 import { colors } from '../stores'
-import { isEqual } from 'lodash-es'
-import { DEFAULT_COLORS } from '../constants'
+import type { Ratings } from '../types'
 
 export let ratings: Ratings
 
@@ -46,11 +44,7 @@ const getBackgroundForRating = (rating: number) => {
 
 <div class="max-w-[100vw] overflow-x-auto">
   <div class="relative p-8">
-    <table
-      class={`table-auto m-auto${
-        isEqual($colors, DEFAULT_COLORS) ? ' [&_td]:text-black' : ''
-      }`}
-    >
+    <table class="table-auto m-auto">
       <tr class="sticky top-0 bg-neutral-900">
         <th aria-hidden="true" />
         {#each Array(maxEpisodeCount) as _, i}
