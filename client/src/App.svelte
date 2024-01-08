@@ -111,25 +111,6 @@ const load = async (tmdbID: string, replaceURL = false) => {
 
 <Corner />
 
-<div
-  class="absolute p-3 bottom-0 bg-red-800 text-red-100 w-full flex items-center"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    class="w-5 h-5 mr-2 shrink-0"
-    fill="currentColor"
-    ><path
-      d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"
-    /></svg
-  >
-
-  <p>
-    The API is currently down, so ratings cannot be fetched. Please check back
-    later. Sorry for the inconvenience!
-  </p>
-</div>
-
 <main class="min-h-[90vh] flex m-auto">
   {#if loading}
     <p class="m-auto">Loading...</p>

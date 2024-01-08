@@ -26,26 +26,9 @@ export default async (req: Request) => {
   const infoJSON: TMDbMediaPartialWithExternalIDs = await infoRes.json()
 
   const res = await fetch(
-    `https://imdb.beuke.org/series.json?sql=select+*+from+series+where+parentTconst+%3D+%27${infoJSON.external_ids.imdb_id}%27`
+    `https://imdb-table.taux.media/?tconst=${infoJSON.external_ids.imdb_id}`
   )
-  const json = await res.json()
-
-  const rows = json.rows
-  const ratings: [number, string][][] = []
-
-  for (const episode of rows) {
-    const seasonNumber = parseInt(episode[2]) - 1
-
-    if (isNaN(seasonNumber)) continue
-
-    if (!ratings[seasonNumber]) {
-      ratings[seasonNumber] = []
-    }
-
-    const episodeNumber = parseInt(episode[3]) - 1
-
-    ratings[seasonNumber][episodeNumber] = [episode[6], episode[0]]
-  }
+  const ratings = await res.json()
 
   return resJSON(
     {
