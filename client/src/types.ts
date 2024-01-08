@@ -10,7 +10,7 @@ export interface SearchResult {
   year?: number
 }
 
-export type Ratings = Array<Array<[number, string]>>
+export type Ratings = Array<Array<[string, number]>>
 
 export interface Info {
   name: string

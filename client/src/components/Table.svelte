@@ -10,7 +10,7 @@ let activeEpisode: number | null = null
 let maxEpisodeCount = ratings.reduce(
   (max, currentSeason) =>
     currentSeason?.length > max ? currentSeason.length : max,
-  0
+  0,
 )
 
 const getBackgroundForRating = (rating: number) => {
@@ -81,15 +81,15 @@ const getBackgroundForRating = (rating: number) => {
                   activeSeason = null
                   activeEpisode = null
                 }}
-                class={`${getBackgroundForRating(episode[0])}`}
+                class={`${getBackgroundForRating(episode[1])}`}
               >
                 <a
                   class="block p-1"
                   aria-label={`Season ${seasonIndex + 1} Episode ${
                     episodeIndex + 1
                   }`}
-                  href={`https://www.imdb.com/title/${episode[1]}/`}
-                  >{episode[0].toFixed(1)}</a
+                  href={`https://www.imdb.com/title/${episode[0]}/`}
+                  >{episode[1].toFixed(1)}</a
                 >
               </td>
             {:else}
