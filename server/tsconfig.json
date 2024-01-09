@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
+    "strict": true,
     "target": "es2021",
-    "module": "commonjs",
+    "lib": ["es2021"],
+    "jsx": "react",
+    "module": "es2022",
     "moduleResolution": "node",
+    "types": ["@cloudflare/workers-types/2023-07-01"],
+    "resolveJsonModule": true,
+    "noEmit": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
     "skipLibCheck": true
   }
 }

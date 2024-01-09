@@ -1,13 +1,14 @@
 <script lang="ts">
+import type { Info } from '@api-types'
 import { isEqual } from 'lodash-es'
 import { onMount, tick } from 'svelte'
-import { getInfo, getWatchTime, search } from './api'
+import { getInfo, search } from './api'
 import Autocomplete from './components/Autocomplete.svelte'
 import Corner from './components/Corner.svelte'
 import Table from './components/Table.svelte'
 import { COLORBLIND_COLORS, DEFAULT_COLORS } from './constants'
 import { colors } from './stores'
-import type { AutocompleteItem, Info } from './types'
+import type { AutocompleteItem } from './types'
 
 let isColorblind = isEqual($colors, COLORBLIND_COLORS)
 
@@ -16,8 +17,8 @@ let loading = false
 let info: Info | null = null
 let watchTime: number | null = null
 
-$: watchTimeDays = watchTime ? Math.floor(watchTime / 60 / 24) : 0
-$: watchTimeHours = watchTime ? Math.round((watchTime / 60) % 24) : 0
+$: watchTimeDays = info?.watchTime ? Math.floor(info.watchTime / 60 / 24) : 0
+$: watchTimeHours = info?.watchTime ? Math.round((info.watchTime / 60) % 24) : 0
 
 onMount(async () => {
   const queryParams = new URLSearchParams(location.search)
@@ -53,7 +54,7 @@ const getAutocompletions = async (
 
   return searchResults.map((res) => ({
     id: res.id,
-    label: res.title,
+    label: res.name,
     secondaryLabel: res.year?.toString(),
   }))
 }
@@ -80,16 +81,9 @@ const load = async (tmdbID: string, replaceURL = false) => {
   try {
     loading = true
 
-    const [infoRes, watchTimeRes] = await Promise.allSettled([
-      getInfo(tmdbID),
-      getWatchTime(tmdbID),
-    ])
+    const infoRes = await getInfo(tmdbID)
 
-    if (infoRes.status !== 'fulfilled') throw new Error('Failed to get info')
-
-    info = infoRes.value
-
-    if (watchTimeRes.status === 'fulfilled') watchTime = watchTimeRes.value
+    info = infoRes
 
     loading = false
 
