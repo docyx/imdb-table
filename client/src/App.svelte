@@ -42,7 +42,6 @@ const onPopState = () => {
   }
 
   info = null
-  watchTime = null
 
   tick().then(() => inputEl?.focus())
 }
@@ -69,7 +68,6 @@ const onColorblindToggle = ({ currentTarget }: Event) => {
 
 const onGoBackClick = async () => {
   info = null
-  watchTime = null
 
   history.pushState({}, '', import.meta.env.BASE_URL)
 
@@ -128,7 +126,7 @@ const load = async (tmdbID: string, replaceURL = false) => {
         {/if}
       </div>
 
-      {#if watchTime}
+      {#if info.watchTime}
         <div class="bg-neutral-700 rounded-full inline-block px-3 py-1 mb-6">
           <p>
             Watch time: <span class="font-semibold"
