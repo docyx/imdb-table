@@ -1,19 +1,16 @@
-import type { SearchResult } from './types'
+import type { SimpleMedia } from '@api-types'
 
 const BASE_URL = import.meta.env.DEV
-  ? 'http://localhost:3000/api'
-  : 'https://imdb-table.vercel.app/api'
+  ? 'http://localhost:8787'
+  : 'https://imdb-table.taux.media'
 
-const getJSONResponse = async (endpoint: string) => {
+const getJsonResponse = async (endpoint: string) => {
   const res = await fetch(`${BASE_URL}/${endpoint}`)
   return await res.json()
 }
 
-export const search = async (query: string): Promise<SearchResult[]> =>
-  await getJSONResponse(`search?q=${query}`)
+export const search = async (query: string): Promise<SimpleMedia[]> =>
+  await getJsonResponse(`search?q=${query}`)
 
 export const getInfo = async (tmdbID: string) =>
-  await getJSONResponse(`info?id=${tmdbID}`)
-
-export const getWatchTime = async (tmdbID: string) =>
-  (await getJSONResponse(`watch-time?id=${tmdbID}`)).watchTime
+  await getJsonResponse(`info?id=${tmdbID}`)

@@ -1,0 +1,8 @@
+name = "xxx"
+main = "src/index.ts"
+compatibility_date = "2023-12-18"
+
+[[d1_databases]]
+binding = "RATINGS"
+database_name = "xxx"
+database_id = "xxx"

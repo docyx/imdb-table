@@ -1,8 +1,8 @@
 <script lang="ts">
+import type { Rating } from '@api-types'
 import { colors } from '../stores'
-import type { Ratings } from '../types'
 
-export let ratings: Ratings
+export let ratings: Rating[][]
 
 let activeSeason: number | null = null
 let activeEpisode: number | null = null
