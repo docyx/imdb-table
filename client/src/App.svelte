@@ -15,7 +15,6 @@ let isColorblind = isEqual($colors, COLORBLIND_COLORS)
 let inputEl: HTMLInputElement | null = null
 let loading = false
 let info: Info | null = null
-let watchTime: number | null = null
 
 $: watchTimeDays = info?.watchTime ? Math.floor(info.watchTime / 60 / 24) : 0
 $: watchTimeHours = info?.watchTime ? Math.round((info.watchTime / 60) % 24) : 0
