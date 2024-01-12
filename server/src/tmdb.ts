@@ -1,4 +1,4 @@
-import type { SimpleMedia, TMDbMediaPartial } from './types'
+import type { SimpleMedia, TmdbMediaPartial } from './types'
 
 const fetchTmdb = async <T>(
   apiKey: string,
@@ -14,10 +14,12 @@ const fetchTmdb = async <T>(
     `https://api.themoviedb.org/3/${endpoint}?${searchParams}`
   )
 
+  if (!res.ok) throw new Error('TMDb request failed')
+
   return await res.json<T>()
 }
 
-export const simplifyMediaObject = (media: TMDbMediaPartial): SimpleMedia => ({
+export const simplifyMediaObject = (media: TmdbMediaPartial): SimpleMedia => ({
   id: media.id,
   name: media.name,
   year: media.first_air_date
@@ -26,7 +28,7 @@ export const simplifyMediaObject = (media: TMDbMediaPartial): SimpleMedia => ({
 })
 
 export const search = async (apiKey: string, query: string) => {
-  const { results } = await fetchTmdb<{ results: TMDbMediaPartial[] }>(
+  const { results } = await fetchTmdb<{ results: TmdbMediaPartial[] }>(
     apiKey,
     'search/tv',
     {
@@ -38,7 +40,7 @@ export const search = async (apiKey: string, query: string) => {
 }
 
 export const getInfo = (apiKey: string, tmdbId: string) =>
-  fetchTmdb<TMDbMediaPartial & { external_ids: { imdb_id: string } }>(
+  fetchTmdb<TmdbMediaPartial & { external_ids: { imdb_id: string } }>(
     apiKey,
     `tv/${tmdbId}`,
     {

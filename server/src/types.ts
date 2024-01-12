@@ -7,7 +7,7 @@ export interface Env {
 
 export type Rating = [string, number]
 
-export interface TMDbMediaPartial {
+export interface TmdbMediaPartial {
   id: string
   name: string
   number_of_seasons: number

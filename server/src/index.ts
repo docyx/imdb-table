@@ -19,7 +19,11 @@ export default <ExportedHandler<Env>>{
           break
         }
 
-        res = Response.json(await search(env.TMDB_API_KEY, query))
+        try {
+          res = Response.json(await search(env.TMDB_API_KEY, query))
+        } catch {
+          res = Response.json({ message: 'Search failed' }, { status: 500 })
+        }
 
         break
       }
@@ -31,7 +35,17 @@ export default <ExportedHandler<Env>>{
           break
         }
 
-        const media = await getInfo(env.TMDB_API_KEY, tmdbId)
+        let media: Awaited<ReturnType<typeof getInfo>>
+
+        try {
+          media = await getInfo(env.TMDB_API_KEY, tmdbId)
+        } catch {
+          res = Response.json(
+            { message: 'Failed to get info' },
+            { status: 500 }
+          )
+          break
+        }
 
         const [ratings, watchTime] = await Promise.allSettled([
           getRatings(env, media.external_ids.imdb_id),
